@@ -1,15 +1,11 @@
 package evolution;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.Test;
 
 import evolution.feign.BookClient;
 import evolution.pojo.Book;
-import evolution.pojo.BookResource;
 import feign.Feign;
 import feign.Logger;
 import feign.gson.GsonDecoder;
@@ -27,9 +23,20 @@ public class FeignTest {
 			  .target(BookClient.class, "http://localhost:8081/api/books");
 	
 	@Test
-	public void givenBookClient_shouldRunSuccessfully() throws Exception {
-	   List<Book> books = bookClient.findAll().stream()
-	     .map(BookResource::getBook)
-	     .collect(Collectors.toList());
+	public void testFindAll() throws Exception {
+	   List<Book> books = bookClient.findAll();
+	   System.out.println(String.format("The books are %s.", books));
+	}
+	
+	@Test
+	public void testFindAlld() throws Exception {
+	   Book book = new Book();
+	   book.setAuthor("Chen");
+	   bookClient.create(book);
+	}
+	
+	@Test
+	public void testFindByIsbn() throws Exception {
+	   bookClient.findByIsbn("001");
 	}
 }
